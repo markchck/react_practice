@@ -19,7 +19,7 @@ function Nav(props){
       <a id={t.id} href={'/read/'+t.id} onClick={function(event){
                                         // onClick={(event)=>{블라블라~~}} 로 축약가능(에로우펑션)
         event.preventDefault();
-        props.onChangeMode(event.target.id);
+        props.onChangeMode(Number(event.target.id));
         console.log(event.target)
       }}>{t.title}</a>
     </li>)
@@ -44,8 +44,9 @@ function App() {
   // const setMode = _mode[1];
 
   const [mode, setMode] = useState('Welcome');
+  const [id, setId] = useState(null);
   // 축약 
-  
+
   console.log(mode)
 
   const topics = [
@@ -58,16 +59,28 @@ function App() {
   if(mode=== 'Welcome') {
     content =  <Article  title="welcome" body="hello, Web"></Article>
   }else if (mode === 'Read'){
-    content = <Article  title="Read" body="hello, Read"></Article>
+
+    let title, body = null;
+    for(let i=0; i<topics.length; i++){
+      console.log(topics[i].id, id)
+      if(topics[i].id === id){
+        title = topics[i].title;
+        body = topics[i].body;
+      }
+    }
+    content = <Article  title={title} body={body}></Article>
   }
 
   return (
     <div>
       <Header title="sample" onChangeMode={function(){
-        mode = 'Welcome'
+        // mode = 'Welcome'
+        setMode('Welcome')
       }}></Header>
-      <Nav topics={topics} onChangeMode={function(id){
-        mode = "Read"
+      <Nav topics={topics} onChangeMode={function(_id){
+        // mode = "Read"
+        setMode('Read')
+        setId(_id)
       }}> </Nav>
       {content}
     </div>
