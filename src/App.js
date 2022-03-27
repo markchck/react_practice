@@ -75,12 +75,31 @@ function App() {
     content = <Article title={topics[id].title} body={topics[id].body}></Article>
   }else if(mode === 'Create'){
     content = <Create onCreate={(_title,_body)=>{
-      topics.push({id: nextId, title: _title, body: _body})
-      const newTopics = topics
-      setTopics(newTopics)
-      setMode('Read')
-      setId(nextId)
-      setNextId(nextId+1)
+      // 1번
+      console.log([...topics])
+      console.log(topics)
+      const newTopic = {id:nextId, title:_title, body: _body}
+      topics.push(newTopic)
+      setTopics(topics)
+      console.log(topics)
+
+      // 2번
+      // topics.push({id: nextId, title: _title, body: _body})
+      // const newTopic = topics
+      // setTopics(newTopic)
+      // setMode('Read')
+      // setId(nextId)
+
+      // 3번
+      // const newTopic = ({id: nextId, title: _title, body: _body})
+      // const newTopics = [...topics]
+      // newTopics.push(newTopic)      
+      // setTopics(newTopics)
+
+      // setNextId(nextId+1)
+
+
+      
     }}></Create>
   }
 
