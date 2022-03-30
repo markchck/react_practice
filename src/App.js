@@ -6,6 +6,7 @@ function Header(props){
   return <header> 
       <h1><a href="/"  onClick={function(event){
         event.preventDefault();
+        props.onChangeMode();
       }}>{props.title}</a></h1>
     </header>
 }
@@ -52,13 +53,24 @@ function Create(props){
         <input type="submit"></input>
       </form>
     </article> 
-  }
+}
 
+function Update(props){
+  return<article>
+    <form onSubmit={(event)=>{
+      event.preventDefault();
+    }}>
+      <input type="text" name="title" value={props.title}></input>
+      <input type="text" name="body" value={props.body}></input>
+      <input type="submit"></input>
+    </form>
+  </article>
+}
+ 
 function App() {
   const [mode, setMode] = useState('Welcome')
   const [id, setId] = useState(null)
   const [nextId, setNextId] = useState(3)
-
   const [topics, setTopics] =useState(
     [
       {id: 0, title: 'html', body: 'html is ...'},
@@ -66,58 +78,59 @@ function App() {
       {id: 2, title: 'Javascript', body: 'javascript is ...'}
     ]
   )
-
-
   let content = null;
+  let updateForm =null;
   if(mode === 'Welcome'){
     content = <Article  title="Welcome" body="hello, Web"></Article>
   }else if(mode === 'Read'){
     content = <Article title={topics[id].title} body={topics[id].body}></Article>
+    updateForm = <a href="/update/" onClick={(event)=>{
+      event.preventDefault();
+      setMode('Update')
+    }}>Update</a>
   }else if(mode === 'Create'){
     content = <Create onCreate={(_title,_body)=>{
-      // 1번
-      console.log([...topics])
-      console.log(topics)
-      const newTopic = {id:nextId, title:_title, body: _body}
-      topics.push(newTopic)
-      setTopics(topics)
-      console.log(topics)
+      // 1번 이케는 하지 말래
+      // console.log([...topics])
+      // console.log(topics)
+      // const newTopic = {id:nextId, title:_title, body: _body}
+      // topics.push(newTopic)
+      // setTopics(topics)
+      // console.log(topics)
 
-      // 2번
-      // topics.push({id: nextId, title: _title, body: _body})
-      // const newTopic = topics
-      // setTopics(newTopic)
-      // setMode('Read')
-      // setId(nextId)
+      // 2번 재민
+      topics.push({id: nextId, title: _title, body: _body})
+      const newTopic = topics
+      setTopics(newTopic)
+      setMode('Read')
+      setId(nextId)
 
-      // 3번
+      // 3번 생활코딩
       // const newTopic = ({id: nextId, title: _title, body: _body})
       // const newTopics = [...topics]
       // newTopics.push(newTopic)      
       // setTopics(newTopics)
-
-      // setNextId(nextId+1)
-
-
-      
+      setNextId(nextId+1)
     }}></Create>
+  }else if(mode === 'Update'){
+    content = <Update id={id} title={topics[id].title} body={topics[id].body}></Update>
   }
-
   return (
     <div>
-      <Header title="sample"></Header>
+      <Header title="sample" onChangeMode={function(){
+        setMode('Welcome')
+      }}></Header>
 
       <Nav topics={topics} onChangeMode={function(id){
         setMode('Read')
         setId(topics[id].id)
       }}> </Nav>
-
-      {content}
-
+      {content} <br></br>
+      {updateForm} <br></br>
       <a href='/create' onClick={(event)=>{
         event.preventDefault();
         setMode('Create')
-      }}>Create</a>
+      }}>Create</a> <br></br>
     </div>
   );
 }
