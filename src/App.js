@@ -92,7 +92,6 @@ function App() {
   if(mode=== 'Welcome') {
     content =  <Article  title="welcome" body="hello, Web"></Article>
   }else if (mode === 'Read'){
-
     let title, body = null;
     for(let i=0; i<topics.length; i++){
       if(topics[i].id === id){
@@ -101,10 +100,22 @@ function App() {
       }
     }
     content = <Article  title={title} body={body}></Article>
-    contextControl = <li><a href={'/update/'+id} onClick={(event)=>{
-      event.preventDefault();
-      setMode('Update')
-    }}>Update</a></li>
+    contextControl = <>
+      <li><a href={'/update/'+id} onClick={(event)=>{
+        event.preventDefault();
+        setMode('Update')
+      }}>Update</a></li>
+      <li><input type="button" value="delete" onClick={()=>{
+        const newTopics=[]
+        for(let i=0; i<topics.length; i ++){
+          if(topics[i].id !== id){
+            newTopics.push(topics[i]);
+          }
+        }
+        setTopics(newTopics);
+        setMode('Welcome')
+      }}></input></li>
+    </>
   }else if(mode === 'Create'){
     content = <Create onCreate={(_title, _body)=>{
       const newTopic = {id: nextId, title: _title, body: _body}
@@ -126,10 +137,7 @@ function App() {
     content = <Update title={title} body={body} onUpdate={(_title, _body)=>{
       const newTopics = [...topics]
       const updatedTopic = {id: id ,title: _title, body: _body}
-      console.log(updatedTopic)
       for(let i=0; i<newTopics.length; i++){
-        console.log(newTopics[i].id)
-        console.log(id)
         if(newTopics[i].id === id){
           newTopics[i]=updatedTopic;
           break;
