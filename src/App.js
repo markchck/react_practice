@@ -29,14 +29,12 @@ function Nav(props){
     </ol>
   </nav>
 }
-
 function Article(props){
   return <article>
     <h2>{props.title}</h2>
     {props.body}
   </article>
 }
-
 function Create(props){
     return <article>
       <h2>Create</h2>
@@ -54,19 +52,27 @@ function Create(props){
       </form>
     </article> 
 }
-
 function Update(props){
+  const [title, setTitle] = useState(props.title);
+  const [body, setBody] = useState(props.body);
   return<article>
+    <h2>Update</h2>
     <form onSubmit={(event)=>{
       event.preventDefault();
+      const _title = title
+      const _body = body
+      props.onUpdate(_title,_body);
     }}>
-      <input type="text" name="title" value={props.title}></input>
-      <input type="text" name="body" value={props.body}></input>
+      <input type="text" name="title" value={title} onChange={(event)=>{
+        setTitle(event.target.value);
+      }}></input>
+      <input type="text" name="body" value={body} onChange={(event)=>{
+        setBody(event.target.value);
+      }}></input>
       <input type="submit"></input>
     </form>
   </article>
 }
- 
 function App() {
   const [mode, setMode] = useState('Welcome')
   const [id, setId] = useState(null)
@@ -97,14 +103,14 @@ function App() {
       // topics.push(newTopic)
       // setTopics(topics)
       // console.log(topics)
-
+      
       // 2번 재민
       topics.push({id: nextId, title: _title, body: _body})
       const newTopic = topics
       setTopics(newTopic)
       setMode('Read')
       setId(nextId)
-
+      
       // 3번 생활코딩
       // const newTopic = ({id: nextId, title: _title, body: _body})
       // const newTopics = [...topics]
@@ -113,14 +119,18 @@ function App() {
       setNextId(nextId+1)
     }}></Create>
   }else if(mode === 'Update'){
-    content = <Update id={id} title={topics[id].title} body={topics[id].body}></Update>
+    content = <Update id={id} title={topics[id].title} body={topics[id].body} onUpdate={(_title,_body)=>{
+      topics[id].title = _title;
+      topics[id].body = _body;
+      setTopics(topics)
+      setMode('Read')
+    }}></Update>
   }
   return (
     <div>
       <Header title="sample" onChangeMode={function(){
         setMode('Welcome')
       }}></Header>
-
       <Nav topics={topics} onChangeMode={function(id){
         setMode('Read')
         setId(topics[id].id)
