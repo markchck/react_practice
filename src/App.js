@@ -132,13 +132,13 @@ function App() {
       setMode('Read')
     }}></Update>
   }else if(mode === 'Delete'){
-    for (let i=0; i<topics.length; i++){
-      if(topics[i] !== topics[id]){
+    for (let i = 0; i < topics.length; i ++){
+      if(topics[i].id !== id){
         newTopics.push(topics[i])
-        console.log(i)
       }
     }
     setTopics(newTopics)
+    setMode('Welcome')
   }
   return (
     <div>
