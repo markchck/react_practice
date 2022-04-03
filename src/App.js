@@ -86,6 +86,8 @@ function App() {
   )
   let content = null;
   let updateForm =null;
+  let deleteButton = null;
+  let newTopics = [];
   if(mode === 'Welcome'){
     content = <Article  title="Welcome" body="hello, Web"></Article>
   }else if(mode === 'Read'){
@@ -94,6 +96,10 @@ function App() {
       event.preventDefault();
       setMode('Update')
     }}>Update</a>
+    deleteButton = <a href='/delete' onClick={(event)=>{
+      event.preventDefault()
+      setMode('Delete')
+    }}>Delete</a>
   }else if(mode === 'Create'){
     content = <Create onCreate={(_title,_body)=>{
       // 1번 이케는 하지 말래
@@ -125,6 +131,14 @@ function App() {
       setTopics(topics)
       setMode('Read')
     }}></Update>
+  }else if(mode === 'Delete'){
+    for (let i=0; i<topics.length; i++){
+      if(topics[i] !== topics[id]){
+        newTopics.push(topics[i])
+        console.log(i)
+      }
+    }
+    setTopics(newTopics)
   }
   return (
     <div>
@@ -136,11 +150,12 @@ function App() {
         setId(topics[id].id)
       }}> </Nav>
       {content} <br></br>
-      {updateForm} <br></br>
       <a href='/create' onClick={(event)=>{
         event.preventDefault();
         setMode('Create')
       }}>Create</a> <br></br>
+      {updateForm} <br></br>
+      {deleteButton} <br></br>
     </div>
   );
 }
